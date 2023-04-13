@@ -2,7 +2,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework import generics
 from .serializers import *
-from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from unidecode import unidecode
 from rest_framework import status
 from .models import *
@@ -14,7 +13,6 @@ from rest_framework.views import APIView
 
 class UserRegister(generics.GenericAPIView):
     serializer_class = UserRegisterSerializer
-    parser_classes = (MultiPartParser, FormParser, JSONParser,)
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -69,7 +67,6 @@ class UserRegister(generics.GenericAPIView):
 
 class UserLogin(generics.GenericAPIView):
     serializer_class = UserLoginSerializer
-    parser_classes = (MultiPartParser, FormParser, JSONParser,)
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):

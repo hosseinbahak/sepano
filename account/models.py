@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 import os
 
 
-GENDER_CHOICES = ((0, 'female'), (1, 'male'), (3, 'undefined'))
+GENDER_CHOICES = ((0, 'female'), (1, 'male'), (2, 'undefined'))
 
 
 class UserProfile(models.Model):

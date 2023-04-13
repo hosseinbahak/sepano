@@ -65,8 +65,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'shipnow.wsgi.application'
 
 REST_FRAMEWORK = { 
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '1/minute',
+        'user': '1/minute',
+        'custom_scope': '1/hour',
+    },              
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-    'DATE_INPUT_FORMATS': ['iso-8601', '%Y-%m-%d'],    
+    'DATE_INPUT_FORMATS': ['iso-8601', '%Y-%m-%d'],   
 }
 
 # Database
