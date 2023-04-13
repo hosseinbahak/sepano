@@ -7,4 +7,6 @@ app_name = 'account'
 urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('sign-up/', UserRegister.as_view(), name='User_register'),
+    
 ]

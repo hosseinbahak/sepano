@@ -64,7 +64,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'shipnow.wsgi.application'
 
-REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
+REST_FRAMEWORK = { 
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DATE_INPUT_FORMATS': ['iso-8601', '%Y-%m-%d'],    
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
