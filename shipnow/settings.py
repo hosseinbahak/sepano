@@ -67,11 +67,19 @@ WSGI_APPLICATION = 'shipnow.wsgi.application'
 REST_FRAMEWORK = { 
     'DEFAULT_THROTTLE_RATES': {
         'anon': '1/minute',
-        'user': '1/minute',
+        'user': '10/minute',
         'custom_scope': '1/hour',
     },              
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-    'DATE_INPUT_FORMATS': ['iso-8601', '%Y-%m-%d'],   
+    'DATE_INPUT_FORMATS': ['iso-8601', '%Y-%m-%d'],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 4,
+    'PAGE_QUERY_PARAM': 'page',
+    'PAGE_SIZE_QUERY_PARAM': 'page_size',
+    'MAX_PAGE_SIZE': 10,   
 }
 
 # Database

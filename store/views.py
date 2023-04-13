@@ -6,12 +6,43 @@ from unidecode import unidecode
 from rest_framework import status
 from .models import *
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from django.shortcuts import get_object_or_404
+from account.models import UserProfile
+from rest_framework.pagination import PageNumberPagination
 
 class ProductView(generics.GenericAPIView):
     serializer_class = ProductSerializer
     permission_classes = (IsAuthenticated,)
     throttle_classes = (AnonRateThrottle, UserRateThrottle,)
+    pagination_class = PageNumberPagination
     
+    def get(self, request):
+        try:
+            user_profile = UserProfile.objects.get(user=self.request.user)
+            
+            #all products
+            favorite_products = Product.objects.all().order_by('id')
+            
+            # Filter products based on user favorites
+            all_products = Product.objects.filter(category__in=user_profile.favorites)
+            
+            # Combine all products and favorite products into one queryset
+            queryset = all_products | favorite_products
+            
+            page = self.paginate_queryset(queryset)
+            serializer = self.get_serializer(page, many=True)
+            
+            return Response(
+                response_func(True, "products returned based on favorites and latests", serializer.data),  
+                status=status.HTTP_200_OK
+            )
+            
+        except Exception as e:
+            return Response(
+                            response_func(False, str(e), {}),  
+                            status=status.HTTP_400_BAD_REQUEST
+                )
+        
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -27,16 +58,21 @@ class ProductView(generics.GenericAPIView):
                 price = serializer.validated_data.get("price"),
                 category = serializer.validated_data.get("category")
             )
-            
+                        
             if product_bool:
                 product_obj.description = serializer.validated_data.get("description")
-            
+                user_profile = get_object_or_404(UserProfile, user=request.user)
+                
+                if serializer.validated_data.get("category") not in user_profile.favorites:
+                    user_profile.favorites.append(serializer.validated_data.get("category"))
+                    user_profile.save()
+                
             if not serializer.validated_data.get("count"):
                 product_obj.counter()
                 
             else:
                 product_obj.count = product_obj.count + int(serializer.validated_data.get("count"))
-                  
+            
             product_obj.save()
             
             return Response(
