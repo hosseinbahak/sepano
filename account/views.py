@@ -1,23 +1,19 @@
-from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework import generics
 from .serializers import *
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
-from rest_framework.renderers import JSONRenderer
 from unidecode import unidecode
 from rest_framework import status
 from .models import *
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-from datetime import datetime
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate, login
 
 
 class UserRegister(generics.GenericAPIView):
     serializer_class = UserRegisterSerializer
-    renderer_classes = (JSONRenderer,)
     parser_classes = (MultiPartParser, FormParser, JSONParser,)
 
     def post(self, request):
@@ -71,6 +67,41 @@ class UserRegister(generics.GenericAPIView):
                             status=status.HTTP_400_BAD_REQUEST
                 )
 
+class UserLogin(generics.GenericAPIView):
+    serializer_class = UserLoginSerializer
+    parser_classes = (MultiPartParser, FormParser, JSONParser,)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            
+            user = authenticate(
+                username = unidecode(serializer.validated_data.get("username")),
+                password = unidecode(serializer.validated_data.get("password"))
+            )
+
+            if user is not None:
+                login(request, user)
+                refresh = RefreshToken.for_user(user)
+                token = str(refresh.access_token)
+                return Response(
+                                response_func(True, "user registered successfully", {'access': token, 'refresh': str(refresh)}),  
+                                status=status.HTTP_200_OK
+                            )
+            else:
+                return Response(
+                                response_func(True, "wrong username or password", {'user_exist': False}),  
+                                status=status.HTTP_401_UNAUTHORIZED
+                            )
+
+        except Exception as e:
+            return Response(
+                            response_func(False, str(e), {'user_exist': False}),  
+                            status=status.HTTP_400_BAD_REQUEST
+                )
     
 def response_func(status: bool ,msg: str, data: dict):
     return {

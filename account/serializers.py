@@ -41,3 +41,6 @@ class UserRegisterSerializer(serializers.Serializer):
             )
         return user
 
+class UserLoginSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True, help_text=("string"))
+    password = serializers.CharField(required=True, help_text=("string"))
