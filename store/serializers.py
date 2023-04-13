@@ -8,3 +8,4 @@ class ProductSerializer(serializers.Serializer):
     count = serializers.IntegerField(required=False, default=1,help_text=("string"))
     category = serializers.IntegerField(required=False, default=0, help_text=("string"))
     description = serializers.CharField(required=False, default='', help_text=("string"))
+    image = serializers.ImageField(required=False, help_text=("file"))

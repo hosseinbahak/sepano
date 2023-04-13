@@ -10,39 +10,12 @@ from django.shortcuts import get_object_or_404
 from account.models import UserProfile
 from rest_framework.pagination import PageNumberPagination
 
-class ProductView(generics.GenericAPIView):
+class ProductCreateView(generics.GenericAPIView):
     serializer_class = ProductSerializer
     permission_classes = (IsAuthenticated,)
     throttle_classes = (AnonRateThrottle, UserRateThrottle,)
-    pagination_class = PageNumberPagination
-    
-    def get(self, request):
-        try:
-            user_profile = UserProfile.objects.get(user=self.request.user)
-            
-            #all products
-            favorite_products = Product.objects.all().order_by('id')
-            
-            # Filter products based on user favorites
-            all_products = Product.objects.filter(category__in=user_profile.favorites)
-            
-            # Combine all products and favorite products into one queryset
-            queryset = all_products | favorite_products
-            
-            page = self.paginate_queryset(queryset)
-            serializer = self.get_serializer(page, many=True)
-            
-            return Response(
-                response_func(True, "products returned based on favorites and latests", serializer.data),  
-                status=status.HTTP_200_OK
-            )
-            
-        except Exception as e:
-            return Response(
-                            response_func(False, str(e), {}),  
-                            status=status.HTTP_400_BAD_REQUEST
-                )
-        
+
+   
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -61,6 +34,8 @@ class ProductView(generics.GenericAPIView):
                         
             if product_bool:
                 product_obj.description = serializer.validated_data.get("description")
+                product_obj.image = serializer.validated_data.get("image")
+
                 user_profile = get_object_or_404(UserProfile, user=request.user)
                 
                 if serializer.validated_data.get("category") not in user_profile.favorites:
@@ -89,7 +64,50 @@ class ProductView(generics.GenericAPIView):
                 )
             
             
-            
+class ProductListView(generics.GenericAPIView):
+    serializer_class = ProductSerializer
+    pagination_class = PageNumberPagination
+    throttle_classes = (AnonRateThrottle, UserRateThrottle,)
+
+    def get(self, request):
+        try:
+            if request.user.is_authenticated:
+                user_profile = UserProfile.objects.get(user=self.request.user)
+                
+                #all products
+                all_products = Product.objects.all().order_by('-id')
+                
+                # Filter products based on user favorites
+                favorite_products = Product.objects.filter(category__in=user_profile.favorites)
+                
+                # Combine all products and favorite products into one queryset
+                queryset = all_products | favorite_products
+                
+                page = self.paginate_queryset(queryset)
+                serializer = self.get_serializer(page, many=True)
+                
+                return Response(
+                    response_func(True, "products returned based on favorite and latest", serializer.data),  
+                    status=status.HTTP_200_OK
+                )
+            else:
+                #all products
+                all_products = Product.objects.all().order_by('-id')
+                page = self.paginate_queryset(all_products)
+                serializer = self.get_serializer(page, many=True)
+                
+                return Response(
+                    response_func(True, "latest products returned ", serializer.data),  
+                    status=status.HTTP_200_OK
+                )
+                
+        except Exception as e:
+            return Response(
+                            response_func(False, str(e), {}),  
+                            status=status.HTTP_400_BAD_REQUEST
+                )
+        
+             
 def response_func(status: bool ,msg: str, data: dict):
     return {
         'status': status,
