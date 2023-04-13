@@ -10,7 +10,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate, login
-
+from rest_framework.views import APIView
 
 class UserRegister(generics.GenericAPIView):
     serializer_class = UserRegisterSerializer
@@ -103,9 +103,36 @@ class UserLogin(generics.GenericAPIView):
                             status=status.HTTP_400_BAD_REQUEST
                 )
     
+class Logout(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        try:
+            
+            #token can be put in block list or remove from client side
+            
+            if self.request.user is not None:
+                return Response(
+                                response_func(True, "user logged out", {'user': str(self.request.user)}),  
+                                status=status.HTTP_200_OK
+                            )
+            else:
+                return Response(
+                                response_func(True, "user not found", {}),  
+                                status=status.HTTP_401_UNAUTHORIZED
+                            )
+
+        except Exception as e:
+            return Response(
+                            response_func(False, str(e), {}),  
+                            status=status.HTTP_400_BAD_REQUEST
+                )
+
 def response_func(status: bool ,msg: str, data: dict):
     return {
         'status': status,
         'message': msg,
         'data': data
     } 
+
+
