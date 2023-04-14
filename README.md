@@ -6,15 +6,18 @@
 </p>
 
 
-Sepano is a basic api base store that provides jwt for users to authentication and request calls.  
+shipnow is a basic api base store that provides jwt for users to authentication and request calls.  
 
 ## How to run
 clone the project to your local machine. you can build and run dockerfile or run by virtual env.
 
+virtual environment:
 
 virtualenv .venv  
 
 source .venv/bin/activate  
+
+pip install -r requirement.txt 
 
 python manage.py runserver 0.0.0.0:8000 
 
