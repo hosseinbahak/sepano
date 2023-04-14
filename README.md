@@ -1,4 +1,4 @@
-<h1 align="center"> The Moovie </h1>
+<h1 align="center"> Store </h1>
 
 <p align="center">
   <img src="https://img.shields.io/static/v1?label=Backend&message=Django DRF&color=blue">
@@ -11,9 +11,17 @@ Sepano is a basic api base store that provides jwt for users to authentication a
 ## How to run
 clone the project to your local machine. you can build and run dockerfile or run by virtual env.
 dockerfile:
+\ndocker build -t shipnow .
+\ndocker run -p 8001:8000 shipnow
+
+\nvirtual env:
+\nvirtualenv .venv
+\nsource .venv/bin/activate
+\npython manage.py runserver 0.0.0.0:8000
 
 ## Documentation
 The documentaions is available on homepage (localhost:8000/)
+
 <img src="https://github.com/hosseinbahak/sepano/tree/main/media/doc.png">
 
 ## Contributor
