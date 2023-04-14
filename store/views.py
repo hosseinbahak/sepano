@@ -11,7 +11,7 @@ from account.models import UserProfile
 from rest_framework.pagination import PageNumberPagination
 
 class ProductCreateView(generics.GenericAPIView):
-    serializer_class = ProductSerializer
+    serializer_class = ProductCreateSerializer
     permission_classes = (IsAuthenticated,)
     throttle_classes = (AnonRateThrottle, UserRateThrottle,)
 
