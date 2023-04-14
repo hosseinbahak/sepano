@@ -13,9 +13,7 @@ clone the project to your local machine. you can build and run dockerfile or run
 
 
 dockerfile:
-
 docker build -t shipnow .
-
 docker run -p 8001:8000 shipnow
 
 virtualenv .venv  
