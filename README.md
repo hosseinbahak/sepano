@@ -33,5 +33,5 @@ The documentaions is available on [homepage](localhost:8000/)
 ## Contributor
 * [hossein bahak](https://github.com/hosseinbahak) back-end and database developer
 ## License
-The Moovie App is open source software licensed as [GPL-3.0](https://github.com/hosseinbahak/SE2/blob/main/LICENSE).
+store is open source software licensed as [GPL-3.0](https://github.com/hosseinbahak/SE2/blob/main/LICENSE).
 
