@@ -23,7 +23,7 @@ class UserRegisterSerializer(serializers.Serializer):
     password = serializers.CharField(required=True, validators=[password_regex], help_text=("string"))
     gender = serializers.CharField(required=False, help_text=("int"))
     birth_date = serializers.DateField(required=False, help_text=("Date field"))
-    email = serializers.EmailField(required=False, validators=[email_regex], allow_blank=True, help_text=("string"))
+    email = serializers.EmailField(required=True, validators=[email_regex], allow_blank=True, help_text=("string"))
     
  
     @staticmethod

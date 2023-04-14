@@ -9,7 +9,7 @@ GENDER_CHOICES = ((0, 'female'), (1, 'male'), (2, 'undefined'))
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.IntegerField(choices = GENDER_CHOICES, null=True, blank=True, default=3)
-    birth_date = models.DateField(default='1998-9-9')
+    birth_date = models.DateField(default='1998-9-9',  null=True, blank=True)
     favorites = models.JSONField(default=list, null=True, blank=True)
 
     def __str__(self):
