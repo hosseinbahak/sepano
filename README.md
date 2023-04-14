@@ -20,9 +20,9 @@ dockerfile:
 \npython manage.py runserver 0.0.0.0:8000
 
 ## Documentation
-The documentaions is available on homepage (localhost:8000/)
+The documentaions is available on [homepage] (localhost:8000/)
 
-<img src="https://github.com/hosseinbahak/sepano/tree/main/media/doc.png">
+<img src="https://raw.githubusercontent.com/hosseinbahak/sepano/main/media/doc.png">
 
 ## Contributor
 * [hossein bahak](https://github.com/hosseinbahak) back-end and database developer
