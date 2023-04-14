@@ -13,11 +13,15 @@ clone the project to your local machine. you can build and run dockerfile or run
 
 
 virtualenv .venv  
+
 source .venv/bin/activate  
+
 python manage.py runserver 0.0.0.0:8000 
 
 dockerfile:
+
 docker build -t shipnow .
+
 docker run -p 8001:8000 shipnow
 
 ## Documentation
