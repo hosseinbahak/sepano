@@ -11,8 +11,11 @@ Sepano is a basic api base store that provides jwt for users to authentication a
 ## How to run
 clone the project to your local machine. you can build and run dockerfile or run by virtual env.
 
+
 dockerfile:
+
 docker build -t shipnow .
+
 docker run -p 8001:8000 shipnow
 
 virtualenv .venv  
